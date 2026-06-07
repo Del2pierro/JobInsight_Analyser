@@ -1,0 +1,126 @@
+# ======================================================================
+# JobInsight AI - .gitignore
+# ======================================================================
+
+# ----------------------------------------------------------------------
+# 1. Python & Backend
+# ----------------------------------------------------------------------
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.venv/
+.env/
+env.bak/
+venv.bak/
+
+# Environment Variables (Secrets)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Testing & Coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Models & Data (Do not commit ML models or raw datasets)
+*.joblib
+*.safetensors
+*.pt
+*.bin
+data/raw/
+data/processed/
+
+# ----------------------------------------------------------------------
+# 2. Node.js & Frontend (Next.js)
+# ----------------------------------------------------------------------
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Next.js environment variables (Do not commit secrets)
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Vercel
+.vercel
+
+# Misc Node
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ----------------------------------------------------------------------
+# 3. Database & Infrastructure
+# ----------------------------------------------------------------------
+# SQLite (if used for local testing)
+*.sqlite3
+*.db
+
+# Docker / Qdrant / Redis local volumes
+qdrant_storage/
+redis_data/
+pg_data/
+docker_volumes/
+
+# ----------------------------------------------------------------------
+# 4. OS & IDEs
+# ----------------------------------------------------------------------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm / IntelliJ
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Antigravity (Optional: Keep rules and skills, ignore temporary execution files)
+.antigravity/scratch/
