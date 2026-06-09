@@ -30,7 +30,7 @@ export default function LoginPage() {
       });
 
       if (response.data && response.data.access_token) {
-        login(response.data.access_token, response.data.refresh_token);
+        await login(response.data.access_token, response.data.refresh_token);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Email ou mot de passe incorrect.");

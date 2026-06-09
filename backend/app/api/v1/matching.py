@@ -104,3 +104,34 @@ def match_job_to_resumes(
         "best_match": scores[0] if scores else None,
         "scores": scores
     }
+
+@router.get("/resume-analysis", response_model=Dict[str, Any])
+def get_resume_analysis_summary(
+    db: Session = Depends(deps.get_db),
+    current_user: User = Depends(deps.get_current_user),
+) -> Dict[str, Any]:
+    """
+    Get a comprehensive analysis summary of the user's best resume.
+    """
+    resume = db.query(Resume).filter(Resume.user_id == current_user.id).order_by(Resume.created_at.desc()).first()
+    if not resume:
+        raise HTTPException(status_code=404, detail="No resume found for this user")
+
+    # This would involve calling the CVMatchingAgent and CareerAdvisorAgent
+    # For now, providing the structure expected by the frontend
+    # In a real scenario, this would be computed by the agents
+    return {
+        "score": 84,
+        "top_matches": [
+            {"id": "1", "title": "Senior React Developer", "company": "TechFlow", "match_score": 92},
+            {"id": "2", "title": "Fullstack Engineer (Node/React)", "company": "CloudScale", "match_score": 88},
+            {"id": "3", "title": "Frontend Architect", "company": "Creative Studio", "match_score": 79},
+        ],
+        "recommendations": [
+            "Ajoutez des projets concrets utilisant Docker pour renforcer votre profil DevOps.",
+            "Certifiez vos compétences en TypeScript pour accéder à des postes de Lead.",
+            "Mettez en avant votre expérience en gestion d'équipe."
+        ],
+        "missing_skills": ["Docker", "Kubernetes", "GraphQL", "Unit Testing"],
+        "strengths": ["React", "Next.js", "Tailwind CSS", "Architecture Logicielle"]
+    }

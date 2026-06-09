@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "@/lib/axios";
 import { Activity } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -38,9 +40,7 @@ export default function RegisterPage() {
       });
 
       if (loginResponse.data && loginResponse.data.access_token) {
-        localStorage.setItem("token", loginResponse.data.access_token);
-        localStorage.setItem("refresh_token", loginResponse.data.refresh_token);
-        router.push("/");
+        await login(loginResponse.data.access_token, loginResponse.data.refresh_token);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Une erreur est survenue lors de l'inscription.");

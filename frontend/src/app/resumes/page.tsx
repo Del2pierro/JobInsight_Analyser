@@ -25,7 +25,7 @@ export default function ResumesPage() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const droppedFile = e.dataTransfer.files[0];
       if (droppedFile.type === "application/pdf") {
@@ -53,7 +53,7 @@ export default function ResumesPage() {
 
   const handleUpload = async () => {
     if (!file) return;
-    
+
     setIsUploading(true);
     setUploadStatus("idle");
     setErrorMessage("");
@@ -66,7 +66,7 @@ export default function ResumesPage() {
       await api.post("/resumes/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      
+
       setUploadStatus("success");
       setFile(null); // Reset form
     } catch (err: any) {
@@ -88,23 +88,22 @@ export default function ResumesPage() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2">
-          
+
           {/* Zone d'Upload (Drag & Drop) */}
           <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-8 glass-panel hover-lift">
             <h3 className="font-semibold text-lg mb-4">Télécharger un nouveau CV</h3>
-            
+
             <div
-              className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center text-center transition-all duration-300 ${
-                isDragging 
-                  ? "border-primary bg-primary/10 scale-[1.02]" 
+              className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center text-center transition-all duration-300 ${isDragging
+                  ? "border-primary bg-primary/10 scale-[1.02]"
                   : "border-muted-foreground/30 hover:border-primary/50 hover:bg-muted/10"
-              }`}
+                }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
               <UploadCloud className={`h-12 w-12 mb-4 transition-colors ${isDragging ? "text-primary" : "text-muted-foreground"}`} />
-              
+
               <h4 className="text-base font-medium mb-2 text-foreground">
                 Glissez & Déposez votre PDF ici
               </h4>
@@ -114,10 +113,10 @@ export default function ResumesPage() {
 
               <label className="cursor-pointer bg-primary text-primary-foreground px-4 py-2.5 rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm">
                 <span>Parcourir mes fichiers</span>
-                <input 
-                  type="file" 
-                  className="hidden" 
-                  accept=".pdf,application/pdf" 
+                <input
+                  type="file"
+                  className="hidden"
+                  accept=".pdf,application/pdf"
                   onChange={handleFileChange}
                 />
               </label>
@@ -164,7 +163,7 @@ export default function ResumesPage() {
           {/* Liste des CVs précédents (Mockup visuel pour l'instant) */}
           <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-8 glass-panel hover-lift">
             <h3 className="font-semibold text-lg mb-4">Historique de vos CVs</h3>
-            
+
             <div className="space-y-4">
               {/* Exemple de CV traité */}
               <div className="p-4 rounded-lg border bg-background flex items-center justify-between">
@@ -184,7 +183,7 @@ export default function ResumesPage() {
                   Actif
                 </div>
               </div>
-              
+
               {/* Message de chargement / état vide */}
               <div className="p-8 text-center text-muted-foreground border-2 border-dashed rounded-lg">
                 <p className="text-sm">Bientôt : la liste complète chargée depuis l'API.</p>

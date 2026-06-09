@@ -4,6 +4,7 @@ Always read:
 
 * .antigravity/rules.md
 * .antigravity/context.md
+* .antigravity/skills/
 
 These files define the architecture and coding standards of JobInsight AI.
 

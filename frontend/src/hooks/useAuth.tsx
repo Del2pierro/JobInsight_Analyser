@@ -7,7 +7,7 @@ import api from "@/lib/axios";
 interface AuthContextType {
   user: any;
   loading: boolean;
-  login: (token: string, refreshToken: string) => void;
+  login: (token: string, refreshToken: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -48,10 +48,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, [pathname, router]);
 
-  const login = (token: string, refreshToken: string) => {
+  const login = async (token: string, refreshToken: string) => {
     localStorage.setItem("token", token);
     localStorage.setItem("refresh_token", refreshToken);
-    router.push("/");
+    setLoading(true);
+    try {
+      const response = await api.get("/auth/me");
+      setUser(response.data);
+      router.push("/");
+    } catch (error) {
+      console.error("Login fetch user failed:", error);
+      router.push("/");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {

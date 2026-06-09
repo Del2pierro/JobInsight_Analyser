@@ -10,7 +10,9 @@ class Skill(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, unique=True, index=True, nullable=False)
-    category = Column(String, nullable=False)  # hard, soft
+    category = Column(String, nullable=False)  # frontend, backend, ai, devops, tools
+    market_demand = Column(Float, default=0.0, nullable=False)  # 0 to 100
+    is_normalized = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     jobs = relationship("JobSkill", back_populates="skill", cascade="all, delete-orphan")

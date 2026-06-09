@@ -5,8 +5,10 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { TrendsChart } from "@/components/dashboard/TrendsChart";
 import { Activity, Briefcase, CheckCircle, TrendingUp, Loader2 } from "lucide-react";
 import api from "@/lib/axios";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Home() {
+  const { user } = useAuth();
   const [trends, setTrends] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +43,9 @@ export default function Home() {
     <DashboardLayout>
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Bonjour, Pierre 👋</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            Bonjour, {user?.full_name?.split(" ")[0] || "Utilisateur"} 👋
+          </h2>
           <p className="text-muted-foreground mt-1">
             {error ? error : "Voici l'analyse en temps réel de votre marché de l'emploi."}
           </p>
