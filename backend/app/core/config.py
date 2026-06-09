@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
+    # --- Scraping ---
+    SCRAPING_DEFAULT_PAGES: int = 3  # Nombre de pages LinkedIn à scraper par défaut
+    SCRAPE_DEFAULT_KEYWORDS: str = "Data Scientist"  # Mots-clés par défaut
+    SCRAPE_DEFAULT_LOCATION: str = "France"  # Localisation par défaut
+
     class Config:
         env_file = ".env"
 

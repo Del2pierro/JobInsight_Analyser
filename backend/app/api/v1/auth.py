@@ -6,9 +6,15 @@ from sqlalchemy.orm import Session
 
 from app.api import deps
 from app.core.exceptions import ConflictException, UnauthorizedException
-from app.core.security import create_access_token, hash_password, verify_password
+from app.core.security import (
+    create_access_token,
+    create_refresh_token,
+    decode_refresh_token,
+    hash_password,
+    verify_password,
+)
 from app.models.user import User
-from app.schemas.auth import Token, UserCreate, UserOut
+from app.schemas.auth import RefreshTokenRequest, Token, UserCreate, UserOut
 
 router = APIRouter()
 
@@ -17,7 +23,6 @@ router = APIRouter()
 def register(user_in: UserCreate, db: Session = Depends(deps.get_db)) -> User:
     """
     Register a new user.
-    Checks for email conflicts and hashes the password before saving.
     """
     user = db.query(User).filter(User.email == user_in.email).first()
     if user:
@@ -42,21 +47,54 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> dict:
     """
-    OAuth2 compatible token login, gets an access token for future requests.
-    Expects 'username' (which is the email here) and 'password' in form data.
+    OAuth2 login. Returns an access token and a long-lived refresh token.
     """
     user = db.query(User).filter(User.email == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise UnauthorizedException("Incorrect email or password")
 
     access_token = create_access_token(subject=user.id, role=user.role)
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = create_refresh_token(subject=user.id)
+    
+    return {
+        "access_token": access_token, 
+        "refresh_token": refresh_token, 
+        "token_type": "bearer"
+    }
+
+
+@router.post("/refresh", response_model=Token)
+def refresh(
+    request: RefreshTokenRequest,
+    db: Session = Depends(deps.get_db),
+) -> dict:
+    """
+    Use a valid refresh token to get a new pair of access/refresh tokens
+    without requiring the user to login again.
+    """
+    payload = decode_refresh_token(request.refresh_token)
+    if not payload:
+        raise UnauthorizedException("Invalid or expired refresh token")
+        
+    user_id = payload.get("sub")
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise UnauthorizedException("User no longer exists")
+        
+    # Rotate both tokens for better security (Refresh Token Rotation)
+    new_access_token = create_access_token(subject=user.id, role=user.role)
+    new_refresh_token = create_refresh_token(subject=user.id)
+    
+    return {
+        "access_token": new_access_token,
+        "refresh_token": new_refresh_token,
+        "token_type": "bearer"
+    }
 
 
 @router.get("/me", response_model=UserOut)
 def read_current_user(current_user: User = Depends(deps.get_current_user)) -> User:
     """
     Get the currently authenticated user.
-    Requires a valid JWT token.
     """
     return current_user

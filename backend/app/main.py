@@ -121,14 +121,14 @@ def create_app() -> FastAPI:
     # ------------------------------------------------------------------
     # API Routers (registered here, implemented in api/v1/)
     # ------------------------------------------------------------------
-    from app.api.v1 import auth
-    app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
-    # app.include_router(jobs.router,     prefix="/api/v1/jobs",     tags=["Jobs"])
-    # app.include_router(skills.router,   prefix="/api/v1/skills",   tags=["Skills"])
-    # app.include_router(trends.router,   prefix="/api/v1/trends",   tags=["Trends"])
-    # app.include_router(resumes.router,  prefix="/api/v1/resumes",  tags=["Resumes"])
-    # app.include_router(matching.router, prefix="/api/v1/matching", tags=["Matching"])
-    # app.include_router(reports.router,  prefix="/api/v1/reports",  tags=["Reports"])
+    from app.api.v1 import auth, jobs, resumes, matching, skills, trends, reports
+    app.include_router(auth.router,     prefix="/api/v1/auth",     tags=["Authentication"])
+    app.include_router(jobs.router,     prefix="/api/v1/jobs",     tags=["Jobs"])
+    app.include_router(skills.router,   prefix="/api/v1/skills",   tags=["Skills"])
+    app.include_router(trends.router,   prefix="/api/v1/trends",   tags=["Trends"])
+    app.include_router(resumes.router,  prefix="/api/v1/resumes",  tags=["Resumes"])
+    app.include_router(matching.router, prefix="/api/v1/matching", tags=["Matching"])
+    app.include_router(reports.router,  prefix="/api/v1/reports",  tags=["Reports"])
 
     # ------------------------------------------------------------------
     # Health Check Endpoint

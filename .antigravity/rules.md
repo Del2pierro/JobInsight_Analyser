@@ -30,3 +30,69 @@
 *   **Next.js**: React Server Components (RSC) by default for data fetching. Use `'use client'` only for interactive UI/state.
 *   **TypeScript**: `strict: true`. No `any` type allowed. Always declare API response types.
 *   **Tailwind**: Use utility classes exclusively. Adhere to custom CSS variables of `shadcn/ui` theme system for consistency & dark/light modes.
+
+## 6. JobInsight AI Domain Rules
+
+### Agents
+
+The application contains the following business agents:
+
+* CollectorAgent
+* SkillExtractionAgent
+* TrendAnalysisAgent
+* CVMatchingAgent
+* CareerAdvisorAgent
+* ReportAgent
+
+Agents are application services and must never contain infrastructure code.
+
+### Job Collection
+
+* Job offers are the source of truth for market analysis.
+* Every collected offer must be normalized before persistence.
+* Duplicate jobs must be detected using URL hash and content similarity.
+
+### Skill Extraction
+
+* Skills must be normalized against a centralized skill taxonomy.
+* Synonyms must map to the same canonical skill.
+
+Example:
+
+* JS → JavaScript
+* TS → TypeScript
+* Postgres → PostgreSQL
+
+### Resume Matching
+
+Matching score must combine:
+
+* skill similarity
+* semantic similarity
+* experience alignment
+* location compatibility
+
+Scores must range from 0 to 100.
+
+### Trends
+
+Trend calculations must be reproducible.
+
+Indicators:
+
+* top skills
+* salary evolution
+* emerging technologies
+* market demand evolution
+
+### AI Assistant
+
+CareerAdvisorAgent must use RAG.
+
+Context sources:
+
+* PostgreSQL analytics
+* Qdrant vector search
+
+LLMs must not generate recommendations without contextual data.
+
